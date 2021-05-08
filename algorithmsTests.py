@@ -16,6 +16,25 @@ class DAPAlgorithmTests(unittest.TestCase):
 
     self.assertEqual(gene.values, [3, 0, 1])
 
+  def test_createGene_withValuesThatEqualsToSumOfDemandVolume_SecondCase(self):
+    volume = 2
+    paths = self.__anyPaths()
+    demand = Demand(0, 0, volume, paths)
+    
+    self.__interceptSeed()
+    gene = createGene(demand)
+
+    self.assertEqual(gene.values, [1, 0, 1])
+
+  def test_createGene_withValuesThatEqualsToSumOfDemandVolume_ThirdCase(self):
+    volume = 1
+    paths = self.__anyPaths()
+    demand = Demand(0, 0, volume, paths)
+    
+    self.__interceptSeed()
+    gene = createGene(demand)
+
+    self.assertEqual(gene.values, [1, 0, 0])
 
   # MARK: - Helper methods
 
