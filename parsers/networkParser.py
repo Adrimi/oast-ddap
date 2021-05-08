@@ -1,5 +1,5 @@
 import os
-from NetworkModels import Network, Link, Demand, Path
+from parsers.NetworkModels import Network, Link, Demand, Path
 
 
 def createNetworkFrom(doc):

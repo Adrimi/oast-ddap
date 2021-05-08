@@ -1,9 +1,9 @@
 import os
 from loaders.XMLFileLoader import loadFileFrom
 from parsers.NetworkParser import createNetworkFrom
-from algorithms import setSeed, solve, Configuration
+from algorithms.algorithms import setSeed, solve, Configuration
 
-sourceDirectory = "input/"
+inputDirectory = "input/"
 filename = "net4.xml"
 
 seed = "abc"
@@ -11,7 +11,7 @@ seed = "abc"
 environmentConfiguration = Configuration()
 
 def main():
-  path = os.path.join(os.getcwd(), sourceDirectory + filename)
+  path = os.path.join(os.getcwd(), inputDirectory + filename)
   doc = loadFileFrom(path)
   network = createNetworkFrom(doc)
   

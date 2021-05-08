@@ -24,6 +24,7 @@ class NetworkParserIntegrationTests(unittest.TestCase):
       Link(startNode=2, endNode=4, numberOfModules=72, moduleCost=1, linkModule=2),
       Link(startNode=3, endNode=4, numberOfModules=72, moduleCost=1, linkModule=2)
     ])
+    
     self.assertEqual(network.demands, [
       Demand(startNode=1, endNode=2, volume=3, paths=[Path(linkId=[1]), Path(linkId=[2, 3]), Path(linkId=[2, 5, 4])]),
       Demand(startNode=1, endNode=3, volume=4, paths=[Path(linkId=[2]), Path(linkId=[1, 3]), Path(linkId=[1, 4, 5])]),
