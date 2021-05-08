@@ -4,8 +4,8 @@ import random
 from dataclasses import dataclass
 from typing import List
 
-from models import Demand, Path
-from algorithms import createGene, Gene
+from models import Network, Link, Demand, Path
+from algorithms import createGene, createChromosome, Gene
 
 
 class TestCase:
@@ -37,11 +37,20 @@ class DAPAlgorithmTests(unittest.TestCase):
       self.assertEqual(sum(result.values), case.demand.volume)
 
 
+  def test_createChromosome_returnsCorrectChromosome(self):
+    network = self.__loadNetwork()
+
+    chromosome = createChromosome(network)
+
+    self.assertEqual(chromosome.genes, [])
+
   # MARK: - Helper methods
 
   def __interceptSeed(self):
     random.seed(2000)
 
+  def __loadNetwork(self):
+    return Network([], [])
 
 # MARK: - Launch 
 

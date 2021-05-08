@@ -23,7 +23,7 @@ from dataclasses import dataclass
 from typing import List
 
 
-# Models namespace, algorithm specific objects
+# MARK: - Models namespace, algorithm specific objects
 
 
 @dataclass
@@ -46,14 +46,14 @@ class Configuration:
   maxImprovementsNumber = 15
 
 
-# Main API
+# MARK: - Main API
 
 def solve(network, configuration): 
   initialGeneration = createFirstGeneration(network, configuration)
   print(initialGeneration[0])
 
 
-# Helper methods
+# MARK: - Helper methods
 
 def setSeed(seed):
   random.seed(seed)
@@ -62,11 +62,11 @@ def setSeed(seed):
 def createFirstGeneration(network, configuration) -> List[Chromosome]:
   generation = []
   for i in range(configuration.populationSize):
-    generation.append(createChromosome(network, configuration))
+    generation.append(createChromosome(network))
   return generation
 
 
-def createChromosome(network, configuration) -> Chromosome:
+def createChromosome(network) -> Chromosome:
   genes = list(map(
     createGene,
     network.demands
@@ -82,6 +82,7 @@ def createGene(demand) -> Gene:
     for index in range(numberOfPaths):
       values.append(random.randint(0, demand.volume - sum(values)))
 
+      # if this is last iteration of for loop AND sum is still mismatched, then add the missing value 
       if index == numberOfPaths - 1 and sum(values) != demand.volume:
         values = values[:-1] + [values[-1] + demand.volume - sum(values)]
 
