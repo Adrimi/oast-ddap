@@ -4,7 +4,7 @@ from models import Network, Link, Demand, Path
 
 def createNetworkFrom(doc):
   links = list(map(LinkInit, element("link", doc)))
-  demands = list(map(DemandInit, element("demands", doc)))
+  demands = list(map(DemandInit, element("demand", doc)))
   return Network(links, demands)
 
 
