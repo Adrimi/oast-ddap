@@ -14,10 +14,19 @@ class NetworkParserIntegrationTests(unittest.TestCase):
     XMLString = TestHelpers.XML_STRING
     expectedNetwork = self.__testNetwork()
     doc = xml.parseString(XMLString)
-    self.maxDiff = None
 
     network = createNetworkFrom(doc)
-    self.assertEqual(network, expectedNetwork)
+
+    self.assertEqual(network.demands[0].id, expectedNetwork.demands[0].id)
+    self.assertEqual(network.demands[0].startNode, expectedNetwork.demands[0].startNode)
+    self.assertEqual(network.demands[0].endNode, expectedNetwork.demands[0].endNode)
+    self.assertEqual(network.demands[0].volume, expectedNetwork.demands[0].volume)
+    self.assertEqual(network.demands[0].paths[0].id, expectedNetwork.demands[0].paths[0].id)
+
+    self.assertEqual(network.links[0].id, expectedNetwork.links[0].id)
+    self.assertEqual(network.links[0].startNode, expectedNetwork.links[0].startNode)
+    self.assertEqual(network.links[0].endNode, expectedNetwork.links[0].endNode)
+    self.assertEqual(network.links[0].numberOfModules, expectedNetwork.links[0].numberOfModules)
 
 
   def __testNetwork(self):
