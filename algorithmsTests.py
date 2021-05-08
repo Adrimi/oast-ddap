@@ -26,12 +26,15 @@ class DAPAlgorithmTests(unittest.TestCase):
       TestCase(volume=2, numberOfPaths=2, result=[1, 1]),
       TestCase(volume=4, numberOfPaths=3, result=[3, 0, 1]),
       TestCase(volume=8, numberOfPaths=4, result=[7, 0, 1, 0]),
+      TestCase(volume=2, numberOfPaths=5, result=[1, 0, 1, 0, 0]),
+      TestCase(volume=453234, numberOfPaths=5, result=[235120, 13004, 201468, 1943, 1699]),
     ]
 
     for case in testCases:
       self.__interceptSeed()
       result = createGene(case.demand)
       self.assertEqual(result.values, case.expectedResult)
+      self.assertEqual(sum(result.values), case.demand.volume)
 
 
   # MARK: - Helper methods
