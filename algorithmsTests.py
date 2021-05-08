@@ -22,9 +22,10 @@ class DAPAlgorithmTests(unittest.TestCase):
 
   def test_createGene_withValuesGeneratedSumToDemandVolume(self):
     testCases = [
+      TestCase(volume=3, numberOfPaths=1, result=[3]),
+      TestCase(volume=2, numberOfPaths=2, result=[1, 1]),
       TestCase(volume=4, numberOfPaths=3, result=[3, 0, 1]),
-      TestCase(volume=2, numberOfPaths=3, result=[1, 0, 1]),
-      TestCase(volume=1, numberOfPaths=3, result=[1, 0, 0])
+      TestCase(volume=8, numberOfPaths=4, result=[7, 0, 1, 0]),
     ]
 
     for case in testCases:

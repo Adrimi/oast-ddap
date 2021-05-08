@@ -81,8 +81,9 @@ def createGene(demand) -> Gene:
   while sum(values) != demand.volume:
     for index in range(numberOfPaths):
       values.append(random.randint(0, demand.volume - sum(values)))
+
       if index == numberOfPaths - 1 and sum(values) != demand.volume:
-        values.append(demand.volume - sum(values))
+        values = values[:-1] + [demand.volume - sum(values)]
 
   if len(values) != numberOfPaths:
     values += [0] * (numberOfPaths - len(values)) 
