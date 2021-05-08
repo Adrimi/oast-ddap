@@ -16,7 +16,6 @@ def main():
   network = createNetworkFrom(doc)
   
   setSeed(seed)
-
   solvedNetwork = solve(network, environmentConfiguration)
 
 if __name__ == '__main__':

@@ -35,6 +35,15 @@ class Chromosome:
   genes: List[Gene]
 
 
+class ChromosomeController:
+  chromosome: Chromosome
+  linkLoad: List[int]
+
+  def __init__(self, chromosome, linkLoad):
+    self.chromosome = chromosome
+    self.linkLoad = linkLoad
+
+
 @dataclass
 class Configuration:
   populationSize = 40 # is that should be % 4 == 0 ?
@@ -50,13 +59,25 @@ class Configuration:
 
 def solve(network, configuration): 
   initialGeneration = createFirstGeneration(network, configuration)
-  print(initialGeneration[0])
+  # getLinkLoad(network, initialGeneration)
 
 
 # MARK: - Helper methods
 
 def setSeed(seed):
   random.seed(seed)
+
+def getLinkLoad(network, chromosome):
+  linkLoad = [0] * len(network.links)
+
+  for demandId, demand in enumerate(network.demands):
+    gene = chromosome.genes[demandId]
+    for pathId, path in enumerate(demand.paths):
+      value = gene.values[pathId]
+      for linkId in path.linkId:
+        linkLoad[linkId - 1] += gene.values[pathId]
+  
+  return linkLoad
 
 
 def createFirstGeneration(network, configuration) -> List[Chromosome]:
