@@ -1,5 +1,6 @@
 import os
-from helpers import loadFileFrom, createNetworkFrom
+from loaders.XMLFileLoader import loadFileFrom
+from parsers.networkParser import createNetworkFrom
 
 sourceDirectory = "input/"
 filename = "net4.xml"

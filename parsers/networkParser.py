@@ -1,12 +1,6 @@
-import xml.dom.minidom as xml
 import os
 from models import Network, Link, Demand, Path
 
-
-# file data loader API
-
-def loadFileFrom(path):
-  return xml.parse(path)
 
 def createNetworkFrom(doc):
   links = list(map(LinkInit, element("link", doc)))
