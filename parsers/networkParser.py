@@ -12,7 +12,6 @@ def createNetworkFrom(doc):
 
 def LinkInit(data):
   return Link(
-    id=data.getAttribute("id"), 
     startNode=firstValue("startNode", data),
     endNode=firstValue("endNode", data),
     numberOfModules=firstValue("numberOfModules", data),
@@ -22,7 +21,6 @@ def LinkInit(data):
 
 def DemandInit(data):
   return Demand(
-    id=data.getAttribute("id"),
     startNode=firstValue("startNode", data),
     endNode=firstValue("endNode", data),
     volume=firstValue("volume", data),
@@ -36,10 +34,9 @@ def DemandInit(data):
 
 def PathInit(data):
   return Path(
-    id=data.getAttribute("id"),
     linkId=list(
       map(
-        lambda x: x.firstChild.data, 
+        lambda x: int(x.firstChild.data), 
         element("linkId", data)
       )
     )
@@ -53,4 +50,4 @@ def element(name, source):
   return source.getElementsByTagName(name)
 
 def firstValue(name, source):
-  return element(name, source)[0].firstChild.data
+  return int(element(name, source)[0].firstChild.data)

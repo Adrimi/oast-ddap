@@ -3,13 +3,11 @@ from typing import List
 
 @dataclass
 class Path:
-  id: int
   linkId: List[int]
 
 
 @dataclass
 class Demand:
-  id: int
   startNode: int
   endNode: int
   volume: int
@@ -18,7 +16,6 @@ class Demand:
 
 @dataclass
 class Link:
-  id: int
   startNode: int
   endNode: int
   numberOfModules: int
