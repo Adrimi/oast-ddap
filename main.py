@@ -1,6 +1,6 @@
 import os
 from loaders.XMLFileLoader import loadFileFrom
-from parsers.networkParser import createNetworkFrom
+from parsers.NetworkParser import createNetworkFrom
 from algorithms import setSeed, solve, Configuration
 
 sourceDirectory = "input/"

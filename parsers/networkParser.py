@@ -1,5 +1,5 @@
 import os
-from models import Network, Link, Demand, Path
+from NetworkModels import Network, Link, Demand, Path
 
 
 def createNetworkFrom(doc):

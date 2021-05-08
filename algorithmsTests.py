@@ -4,6 +4,9 @@ import random
 from dataclasses import dataclass
 from typing import List
 
+import tests.TestHelpers as Helpers
+import xml.dom.minidom as xml
+from parsers.networkParser import createNetworkFrom
 from models import Network, Link, Demand, Path
 from algorithms import createGene, createChromosome, Gene
 
@@ -40,9 +43,17 @@ class DAPAlgorithmTests(unittest.TestCase):
   def test_createChromosome_returnsCorrectChromosome(self):
     network = self.__loadNetwork()
 
+    self.__interceptSeed()
     chromosome = createChromosome(network)
 
-    self.assertEqual(chromosome.genes, [])
+    self.assertEqual(chromosome.genes, [
+      Gene(values=[3, 0, 0]),
+      Gene(values=[2, 2, 0]),
+      Gene(values=[4, 1]),
+      Gene(values=[1, 0, 1]),
+      Gene(values=[2, 1, 0]),
+      Gene(values=[0, 1, 3])
+  ])
 
   # MARK: - Helper methods
 
@@ -50,7 +61,9 @@ class DAPAlgorithmTests(unittest.TestCase):
     random.seed(2000)
 
   def __loadNetwork(self):
-    return Network([], [])
+    return createNetworkFrom(
+      xml.parseString(Helpers.XML_STRING)
+    )
 
 # MARK: - Launch 
 
