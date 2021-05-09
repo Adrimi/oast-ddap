@@ -50,7 +50,7 @@ class DAPAlgorithmTests(unittest.TestCase):
     chromosome = dap.createChromosome(network)
     linkLoadList = dap.getLinkLoad(network, chromosome)
 
-    self.assertEqual(linkLoadList, [12, 6, 5, 11, 3])
+    self.assertEqual(linkLoadList, [91, 63, 44, 101, 61])
 
   def test_getMaximumLoad_returnsTheBiggestValueFromTheList(self):
     network = self.__createNetwork()
@@ -61,7 +61,24 @@ class DAPAlgorithmTests(unittest.TestCase):
 
     maximumLoad = dap.getMaximumLoad(linkLoadList, network.links)
 
-    self.assertEqual(maximumLoad, 0)
+    self.assertEqual(maximumLoad, 37)
+
+  def test_getBestParents_returnsFourChromosomes(self):
+    network = self.__createNetwork()
+    configuration = dap.Configuration()
+
+    self.__interceptSeed()
+    initialGeneration = dap.createFirstGeneration(network, configuration)
+    controllers = dap.createChromControllers(network, initialGeneration)
+    controllers.sort(key=lambda c: c.maximumLoad)
+
+    bestParents = dap.getBestParents(controllers)
+    highestMaximumLoads = list(map(
+      lambda x: x.maximumLoad,
+      bestParents
+    ))
+
+    self.assertEqual(highestMaximumLoads, [13, 19, 20, 26])
 
 
   # MARK: - Helper methods
@@ -72,36 +89,36 @@ class DAPAlgorithmTests(unittest.TestCase):
 
   def __createNetwork(self):
     demands = [
-      Demand(id=1, startNode=1, endNode=2, volume=3, paths=[
+      Demand(id=1, startNode=1, endNode=2, volume=30, paths=[
         Path(id=1, linkId=[1]),
         Path(id=2, linkId=[2, 3]),
         Path(id=3, linkId=[2, 5, 4])
         ]
       ),
-      Demand(id=2, startNode=1, endNode=3, volume=4, paths=[
+      Demand(id=2, startNode=1, endNode=3, volume=40, paths=[
         Path(id=1, linkId=[2]),
         Path(id=2, linkId=[1, 3]),
         Path(id=3, linkId=[1, 4, 5])
         ]
       ),
-      Demand(id=3, startNode=1, endNode=4, volume=5, paths=[
+      Demand(id=3, startNode=1, endNode=4, volume=50, paths=[
         Path(id=1, linkId=[1, 4]),
         Path(id=2, linkId=[2, 5]),
         ]
       ),
-      Demand(id=4, startNode=2, endNode=3, volume=2, paths=[
+      Demand(id=4, startNode=2, endNode=3, volume=20, paths=[
         Path(id=1, linkId=[3]),
         Path(id=2, linkId=[1, 2]),
         Path(id=3, linkId=[4, 5]),
         ]
       ),
-      Demand(id=5, startNode=2, endNode=4, volume=3, paths=[
+      Demand(id=5, startNode=2, endNode=4, volume=30, paths=[
         Path(id=1, linkId=[4]),
         Path(id=2, linkId=[3, 5]),
         Path(id=3, linkId=[1, 2, 5]),
         ]
       ),
-      Demand(id=6, startNode=3, endNode=4, volume=4, paths=[
+      Demand(id=6, startNode=3, endNode=4, volume=40, paths=[
         Path(id=1, linkId=[5]),
         Path(id=2, linkId=[3, 4]),
         Path(id=3, linkId=[2, 1, 4]),
@@ -109,11 +126,11 @@ class DAPAlgorithmTests(unittest.TestCase):
       ),
     ]
     links = [
-      Link(id=1, startNode=1, endNode=2, numberOfModules=72, moduleCost=1, linkModule=2),
-      Link(id=2, startNode=1, endNode=3, numberOfModules=72, moduleCost=1, linkModule=2),
-      Link(id=3, startNode=2, endNode=3, numberOfModules=72, moduleCost=1, linkModule=2),
-      Link(id=4, startNode=2, endNode=4, numberOfModules=72, moduleCost=1, linkModule=2),
-      Link(id=5, startNode=3, endNode=4, numberOfModules=72, moduleCost=1, linkModule=2)
+      Link(id=1, startNode=1, endNode=2, numberOfModules=32, moduleCost=1, linkModule=2),
+      Link(id=2, startNode=1, endNode=3, numberOfModules=32, moduleCost=1, linkModule=2),
+      Link(id=3, startNode=2, endNode=3, numberOfModules=32, moduleCost=1, linkModule=2),
+      Link(id=4, startNode=2, endNode=4, numberOfModules=32, moduleCost=1, linkModule=2),
+      Link(id=5, startNode=3, endNode=4, numberOfModules=32, moduleCost=1, linkModule=2)
     ]
     return Network(links, demands)
 

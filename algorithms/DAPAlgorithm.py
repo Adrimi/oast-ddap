@@ -51,10 +51,15 @@ class Configuration:
   populationSize = 40 # is that should be % 4 == 0 ?
   crossoverProbability = 0.5
   mutationProbability = 0.1
-  maxIterationNumber = 50
+
+  # Stop criteria parameters
+  maxTimeInSeconds = 10
   maxGenerationNumber = 50
   maxMutationEvents = 800
   maxImprovementsNumber = 15
+
+  def stopCrtiteriaHit(self, currentGeneration, mutationCount, currentTimeInSeconds):
+    return currentGeneration > maxGenerationNumber or mutationCount > maxMutationEvents or currentTimeInSeconds > maxTimeInSeconds
 
 
 # MARK: - Main API
@@ -62,15 +67,27 @@ class Configuration:
 def solve(network, configuration): 
   initialGeneration = createFirstGeneration(network, configuration)
   chromControllers = createChromControllers(network, initialGeneration)
+  chromControllers.sort(key=lambda c: c.maximumLoad)
 
-  sortedControllers = chromControllers.sort(key=lambda c: c.maximumLoad)
+  currentGeneration = 0
+  mutationCount = 0
+  currentTimeInSeconds = 0
 
-
+  while configuration.stopCrtiteriaHit(currentGeneration, mutationCount, currentTimeInSeconds) == False:
+    parents = getBestParents(chromControllers)
 
 # MARK: - Helper methods
 
 def setSeed(seed):
   random.seed(seed)
+
+
+# MARK: - Operation on Chromosomes
+
+def getBestParents(controllers):
+  return controllers[:4]
+
+# MARK: - Chromosome controllers
 
 def createChromControllers(network, generation):
   chromControllers = []
@@ -92,13 +109,13 @@ def getLinkLoad(network, chromosome):
   
   return linkLoad
 
-
 def getMaximumLoad(linkLoad, links):
   maximumLoad = 0
   for link in links:
     maximumLoad = max(linkLoad[link.id - 1] - link.numberOfModules * link.linkModule, maximumLoad)
   return maximumLoad
 
+# MARK: - Chromosome generation
 
 def createFirstGeneration(network, configuration) -> List[Chromosome]:
   generation = []
