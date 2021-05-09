@@ -59,7 +59,7 @@ class Configuration:
   maxImprovementsNumber = 15
 
   def stopCrtiteriaHit(self, currentGeneration, mutationCount, currentTimeInSeconds):
-    return currentGeneration > maxGenerationNumber or mutationCount > maxMutationEvents or currentTimeInSeconds > maxTimeInSeconds
+    return currentGeneration > self.maxGenerationNumber or mutationCount > self.maxMutationEvents or currentTimeInSeconds > self.maxTimeInSeconds
 
 
 # MARK: - Main API
@@ -75,6 +75,38 @@ def solve(network, configuration):
 
   while configuration.stopCrtiteriaHit(currentGeneration, mutationCount, currentTimeInSeconds) == False:
     parents = getBestParents(chromControllers)
+    
+    currentGenerationIteration = 0
+    offSprings = []
+
+    firstParent = parents[0]
+    secondParent = parents[1]
+
+    valuesForNewGene = []
+    for index, gene in enumerate(firstParent.chromosome.genes):  
+      if random.uniform(0, 1) < configuration.crossoverProbability:
+        valuesForNewGene.append(secondParent.chromosome.genes[index])
+      else:
+        valuesForNewGene.append(gene)
+
+    child = Chromosome(Gene(valuesForNewGene))
+    offSprings.append(child)
+
+    thirdParent = parents[2]
+    fourthParend = parents[3]
+
+    valuesForNewGene = []
+    for index, gene in enumerate(thirdParent.chromosome.genes):  
+      if random.uniform(0, 1) < configuration.crossoverProbability:
+        valuesForNewGene.append(fourthParend.chromosome.genes[index])
+      else:
+        valuesForNewGene.append(gene)
+
+    child = Chromosome(Gene(valuesForNewGene))
+    offSprings.append(child)
+
+
+
 
 # MARK: - Helper methods
 
