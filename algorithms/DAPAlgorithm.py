@@ -38,10 +38,12 @@ class Chromosome:
 class ChromosomeController:
   chromosome: Chromosome
   linkLoad: List[int]
+  maximumLoad: int
 
-  def __init__(self, chromosome, linkLoad):
+  def __init__(self, chromosome, linkLoad, maximumLoad):
     self.chromosome = chromosome
     self.linkLoad = linkLoad
+    self.maximumLoad = maximumLoad
 
 
 @dataclass
@@ -59,13 +61,24 @@ class Configuration:
 
 def solve(network, configuration): 
   initialGeneration = createFirstGeneration(network, configuration)
-  # getLinkLoad(network, initialGeneration)
+  chromControllers = createChromControllers(network, initialGeneration)
+
+  sortedControllers = chromControllers.sort(key=lambda c: c.maximumLoad)
+
 
 
 # MARK: - Helper methods
 
 def setSeed(seed):
   random.seed(seed)
+
+def createChromControllers(network, generation):
+  chromControllers = []
+  for chrom in generation:
+    linkLoad = getLinkLoad(network, chrom)
+    maximumLoad = getMaximumLoad(linkLoad, network.links)
+    chromControllers.append(ChromosomeController(chrom, linkLoad, maximumLoad))
+  return chromControllers
 
 def getLinkLoad(network, chromosome):
   linkLoad = [0] * len(network.links)
@@ -78,6 +91,13 @@ def getLinkLoad(network, chromosome):
         linkLoad[linkId - 1] += gene.values[pathId]
   
   return linkLoad
+
+
+def getMaximumLoad(linkLoad, links):
+  maximumLoad = 0
+  for link in links:
+    maximumLoad = max(linkLoad[link.id - 1] - link.numberOfModules * link.linkModule, maximumLoad)
+  return maximumLoad
 
 
 def createFirstGeneration(network, configuration) -> List[Chromosome]:

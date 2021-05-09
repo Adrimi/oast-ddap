@@ -7,7 +7,7 @@ from typing import List
 import xml.dom.minidom as xml
 from parsers.NetworkParser import createNetworkFrom
 from parsers.NetworkModels import Network, Link, Demand, Path
-from algorithms import createGene, createChromosome, getLinkLoad, createFirstGeneration, Gene, Configuration
+import DAPAlgorithm as dap
 
 
 class TestCase:
@@ -38,19 +38,30 @@ class DAPAlgorithmTests(unittest.TestCase):
 
     for case in testCases:
       self.__interceptSeed()
-      result = createGene(case.demand)
+      result = dap.createGene(case.demand)
       self.assertEqual(result.values, case.expectedResult)
       self.assertEqual(sum(result.values), case.demand.volume)
 
 
-  def test_setLinkLoad_createsLoadsValuesOnEveryLink(self):
+  def test_getLinkLoad_createsLoadsValuesOnEveryLink(self):
     network = self.__createNetwork()
 
     self.__interceptSeed()
-    chromosome = createChromosome(network)
-    linkLoadList = getLinkLoad(network, chromosome)
+    chromosome = dap.createChromosome(network)
+    linkLoadList = dap.getLinkLoad(network, chromosome)
 
     self.assertEqual(linkLoadList, [12, 6, 5, 11, 3])
+
+  def test_getMaximumLoad_returnsTheBiggestValueFromTheList(self):
+    network = self.__createNetwork()
+
+    self.__interceptSeed()
+    chromosome = dap.createChromosome(network)
+    linkLoadList = dap.getLinkLoad(network, chromosome)
+
+    maximumLoad = dap.getMaximumLoad(linkLoadList, network.links)
+
+    self.assertEqual(maximumLoad, 0)
 
 
   # MARK: - Helper methods
@@ -104,11 +115,14 @@ class DAPAlgorithmTests(unittest.TestCase):
       Link(id=4, startNode=2, endNode=4, numberOfModules=72, moduleCost=1, linkModule=2),
       Link(id=5, startNode=3, endNode=4, numberOfModules=72, moduleCost=1, linkModule=2)
     ]
-    network = Network(links, demands)
-    return network
+    return Network(links, demands)
 
-  # def __testConfiguration(self) -> Configuration:
-  #   Configuration()
+  def __anyChromosome(self):
+    return dap.createChromosome(self.__createNetwork())
+
+
+  # def __testdap.Configuration(self) -> dap.Configuration:
+  #   dap.Configuration()
 
 
 # MARK: - Launch 

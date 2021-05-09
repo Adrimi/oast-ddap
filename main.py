@@ -1,10 +1,10 @@
 import os
 from loaders.XMLFileLoader import loadFileFrom
 from parsers.NetworkParser import createNetworkFrom
-from algorithms.algorithms import setSeed, solve, Configuration
+from algorithms.DAPAlgorithm import setSeed, solve, Configuration
 
 inputDirectory = "input/"
-filename = "net4.xml"
+filename = "net12_1.xml"
 
 seed = "abc"
 
