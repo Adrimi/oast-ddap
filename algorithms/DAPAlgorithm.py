@@ -1,23 +1,3 @@
-## TO BE DELETED!
-'''
-OAST - algorytm ewolucyjny dla problemu DAP
-
-# linkList
-startNode - wezel poczatkowy
-endNode - wezel koncowy
-numberOfModules - ilosc wlokien optycznych w kablu
-moduleCost - koszt wlokna
-linkModule - ilosc lambda w wloknie
-
-# demandList
-startNode - wezel poczatkowy
-endNode - wezel koncowy
-volume - ilosc zapotrzebowania
-paths - sciezki do zapotrzebowaniu
-linkId - identyfikator łącza w zapotrzebowaniu
-'''
-## TO BE DELETED!
-
 import random
 from dataclasses import dataclass
 from typing import List
@@ -84,23 +64,22 @@ def solve(network, configuration):
         firstParentGenes = parents[index].chromosome.genes
         secondParentGenes = parents[index + 1].chromosome.genes
 
-        firstChildGenes, secondChildGenes = rollGenesWithUniformRandomizer(firstParentGenes, secondParentGenes, lambda: uniformProbability(configuration.crossoverProbability))
+        firstChildGenes, secondChildGenes = rollGenesWithUniformRandomizer(
+          firstParentGenes, 
+          secondParentGenes, 
+          lambda: uniformProbability(configuration.crossoverProbability)
+        )
       
         # mutation ( for now only for firstOffsping )
         if uniformProbability(configuration.mutationProbability):
           mutationCount += 1
-          randomDemandId = random.randint(0, len(network.demands) - 1) + 1
+          randomDemandId = getRandomIndex(len(network.demands) - 1) + 1
           pathLen = len(network.demands[randomDemandId - 1].paths)
 
           # if picked demand has only one path then mutation is not available!
           if pathLen == 1: break
 
-          pathRandomOne = random.randint(1, pathLen) - 1
-          pathRandomTwo = pathRandomOne
-
-          # NOTE: possible bottleneck!
-          while pathRandomOne == pathRandomTwo:
-            pathRandomTwo = random.randint(1, pathLen) - 1
+          pathRandomOne, pathRandomTwo = getTwoRandomIndexes(pathLen)
           
           pathLoadValueOne = firstChildGenes[randomDemandId - 1].values[pathRandomOne]
           pathLoadValueTwo = firstChildGenes[randomDemandId - 1].values[pathRandomTwo]
@@ -114,15 +93,20 @@ def solve(network, configuration):
     newPopulation.sort(key=lambda c: c.maximumLoad)
     chromControllers = newPopulation[:configuration.populationSize]
     currentGeneration += 1
+    
     print(chromControllers[0].maximumLoad)
-
-
+  
 
 # MARK: - Helper methods
 
 def setSeed(seed):
   random.seed(seed)
 
+def getRandomIndex(max: int) -> int:
+  return random.randint(0, max)
+
+def getTwoRandomIndexes(max: int):
+  return random.sample(range(0, max), 2)
 
 # MARK: - Operation on Chromosomes and Genes
 
