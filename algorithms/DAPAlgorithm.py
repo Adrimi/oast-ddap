@@ -74,36 +74,19 @@ def solve(network, configuration):
   currentTimeInSeconds = 0
 
   while configuration.stopCrtiteriaHit(currentGeneration, mutationCount, currentTimeInSeconds) == False:
-    parents = getBestParents(chromControllers)
+    parents = chromControllers[:len(chromControllers)/2]
     
     currentGenerationIteration = 0
     offSprings = []
 
-    firstParent = parents[0]
-    secondParent = parents[1]
+    for index in range(len(parents)):
+      if uniformProbability(configuration.crossoverProbability):
+        firstParent = parents[index].chromosome.genes
+        secondParent = parents[index + 1].chromosome.genes
 
-    valuesForNewGene = []
-    for index, gene in enumerate(firstParent.chromosome.genes):  
-      if random.uniform(0, 1) < configuration.crossoverProbability:
-        valuesForNewGene.append(secondParent.chromosome.genes[index])
-      else:
-        valuesForNewGene.append(gene)
-
-    child = Chromosome(Gene(valuesForNewGene))
-    offSprings.append(child)
-
-    thirdParent = parents[2]
-    fourthParend = parents[3]
-
-    valuesForNewGene = []
-    for index, gene in enumerate(thirdParent.chromosome.genes):  
-      if random.uniform(0, 1) < configuration.crossoverProbability:
-        valuesForNewGene.append(fourthParend.chromosome.genes[index])
-      else:
-        valuesForNewGene.append(gene)
-
-    child = Chromosome(Gene(valuesForNewGene))
-    offSprings.append(child)
+        firstChild, secondChild = rollGenesWithUniformRandomizer(firstParent, secondParent, lambda: uniformProbability(configuration.crossoverProbability))
+      
+        offSprings += [Chromosome(firstChild), Chromosome(secondChild)]
 
 
 
@@ -114,10 +97,31 @@ def setSeed(seed):
   random.seed(seed)
 
 
-# MARK: - Operation on Chromosomes
+# MARK: - Operation on Chromosomes and Genes
 
 def getBestParents(controllers):
   return controllers[:4]
+
+def uniformProbability(p: float):
+  def inner():
+    return random.uniform(0, 1) < p
+  return inner
+
+
+def rollGenesWithUniformRandomizer(firstGenes: List[Gene], secondGenes: List[Gene], calculateProbability):
+  newFirstGenes = []
+  newSecondGenes = []
+  for index, gene in enumerate(firstGenes):  
+    if calculateProbability():
+      newFirstGenes.append(secondGenes[index])
+      newSecondGenes.append(gene)
+    else:
+      newFirstGenes.append(gene)
+      newSecondGenes.append(secondGenes[index])
+  return newFirstGenes, newSecondGenes
+
+
+
 
 # MARK: - Chromosome controllers
 

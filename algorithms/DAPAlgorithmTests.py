@@ -16,7 +16,7 @@ class TestCase:
 
   def __init__(self, volume, numberOfPaths, result):
     paths = list(map(
-      lambda i, x: [Path(i, x)],
+      lambda i, x: Path(i, [x]),
       range(numberOfPaths),
       [0] * numberOfPaths
     ))
