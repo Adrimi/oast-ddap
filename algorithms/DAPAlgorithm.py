@@ -1,6 +1,7 @@
 import random
 from dataclasses import dataclass
 from typing import List
+from configuration.Configuration import Configuration
 
 # MARK: - Models namespace, algorithm specific objects
 
@@ -25,22 +26,6 @@ class ChromosomeController:
     self.maximumLoad = maximumLoad
 
 
-@dataclass
-class Configuration:
-  populationSize = 40 # is that should be % 4 == 0 ?
-  crossoverProbability = 0.1
-  mutationProbability = 0.1
-
-  # Stop criteria parameters
-  maxTimeInSeconds = 10
-  maxGenerationNumber = 50
-  maxMutationEvents = 800
-  maxImprovementsNumber = 15
-
-  def stopCrtiteriaHit(self, currentGeneration, mutationCount, currentTimeInSeconds):
-    return currentGeneration > self.maxGenerationNumber or mutationCount > self.maxMutationEvents or currentTimeInSeconds > self.maxTimeInSeconds
-
-
 # MARK: - Main API
 
 def solve(network, configuration): 
@@ -63,7 +48,7 @@ def solve(network, configuration):
         firstParentGenes = parents[index].chromosome.genes
         secondParentGenes = parents[index + 1].chromosome.genes
 
-        firstChildGenes, secondChildGenes = rollGenesWithUniformRandomizer(
+        firstChildGenes, secondChildGenes = crossGenes(
           firstParentGenes, 
           secondParentGenes, 
           lambda: uniformProbability(configuration.crossoverProbability)
@@ -110,7 +95,7 @@ def getBestParents(controllers):
 def uniformProbability(p: float):
   return random.uniform(0, 1) < p
 
-def rollGenesWithUniformRandomizer(firstGenes: List[Gene], secondGenes: List[Gene], crossingIsPossible):
+def crossGenes(firstGenes: List[Gene], secondGenes: List[Gene], crossingIsPossible):
   newFirstGenes = []
   newSecondGenes = []
   for index, gene in enumerate(firstGenes):  
@@ -167,7 +152,7 @@ def getMaximumLoad(linkLoad, links):
 
 # MARK: - Chromosome generation
 
-def createFirstGeneration(network, configuration) -> List[Chromosome]:
+def createFirstGeneration(network, configuration: Configuration) -> List[Chromosome]:
   generation = []
   for i in range(configuration.populationSize):
     generation.append(createChromosome(network))

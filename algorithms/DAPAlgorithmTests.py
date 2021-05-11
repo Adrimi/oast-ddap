@@ -7,7 +7,8 @@ from typing import List
 import xml.dom.minidom as xml
 from parsers.NetworkParser import createNetworkFrom
 from parsers.NetworkModels import Network, Link, Demand, Path
-import DAPAlgorithm as dap
+from configuration.Configuration import Configuration
+import algorithms.DAPAlgorithm as dap
 
 
 class TestCase:
@@ -65,7 +66,7 @@ class DAPAlgorithmTests(unittest.TestCase):
 
   def test_getBestParents_returnsFourChromosomes(self):
     network = self.__createNetwork()
-    configuration = dap.Configuration()
+    configuration = self.testConfiguration()
 
     self.__interceptSeed()
     initialGeneration = dap.createFirstGeneration(network, configuration)
@@ -134,12 +135,9 @@ class DAPAlgorithmTests(unittest.TestCase):
     ]
     return Network(links, demands)
 
-  def __anyChromosome(self):
-    return dap.createChromosome(self.__createNetwork())
 
-
-  # def __testdap.Configuration(self) -> dap.Configuration:
-  #   dap.Configuration()
+  def testConfiguration(self):
+    return Configuration()
 
 
 # MARK: - Launch 
