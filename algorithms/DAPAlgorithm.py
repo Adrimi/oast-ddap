@@ -74,20 +74,47 @@ def solve(network, configuration):
   currentTimeInSeconds = 0
 
   while configuration.stopCrtiteriaHit(currentGeneration, mutationCount, currentTimeInSeconds) == False:
-    parents = chromControllers[:len(chromControllers)/2]
-    
-    currentGenerationIteration = 0
+    # get half of the best chromosomes to be the candidates for parent crossing
+    parents = chromControllers[0:int(len(chromControllers)/2)]
     offSprings = []
-
-    for index in range(len(parents)):
+    
+    for index in range(len(parents) - 1):
+      # crossing
       if uniformProbability(configuration.crossoverProbability):
-        firstParent = parents[index].chromosome.genes
-        secondParent = parents[index + 1].chromosome.genes
+        firstParentGenes = parents[index].chromosome.genes
+        secondParentGenes = parents[index + 1].chromosome.genes
 
-        firstChild, secondChild = rollGenesWithUniformRandomizer(firstParent, secondParent, lambda: uniformProbability(configuration.crossoverProbability))
+        firstChildGenes, secondChildGenes = rollGenesWithUniformRandomizer(firstParentGenes, secondParentGenes, lambda: uniformProbability(configuration.crossoverProbability))
       
-        offSprings += [Chromosome(firstChild), Chromosome(secondChild)]
+        # mutation ( for now only for firstOffsping )
+        if uniformProbability(configuration.mutationProbability):
+          mutationCount += 1
+          randomDemandId = random.randint(0, len(network.demands) - 1) + 1
+          pathLen = len(network.demands[randomDemandId - 1].paths)
 
+          # if picked demand has only one path then mutation is not available!
+          if pathLen == 1: break
+
+          pathRandomOne = random.randint(1, pathLen) - 1
+          pathRandomTwo = pathRandomOne
+
+          # NOTE: possible bottleneck!
+          while pathRandomOne == pathRandomTwo:
+            pathRandomTwo = random.randint(1, pathLen) - 1
+          
+          pathLoadValueOne = firstChildGenes[randomDemandId - 1].values[pathRandomOne]
+          pathLoadValueTwo = firstChildGenes[randomDemandId - 1].values[pathRandomTwo]
+
+          firstChildGenes[randomDemandId - 1].values[pathRandomOne] = pathLoadValueTwo
+          firstChildGenes[randomDemandId - 1].values[pathRandomTwo] = pathLoadValueOne
+        
+        offSprings += createChromControllers(network, [Chromosome(firstChildGenes), Chromosome(secondChildGenes)])
+    
+    newPopulation = chromControllers + offSprings
+    newPopulation.sort(key=lambda c: c.maximumLoad)
+    chromControllers = newPopulation[:configuration.populationSize]
+    currentGeneration += 1
+    print(chromControllers[0].maximumLoad)
 
 
 
@@ -107,7 +134,6 @@ def uniformProbability(p: float):
     return random.uniform(0, 1) < p
   return inner
 
-
 def rollGenesWithUniformRandomizer(firstGenes: List[Gene], secondGenes: List[Gene], calculateProbability):
   newFirstGenes = []
   newSecondGenes = []
@@ -121,11 +147,9 @@ def rollGenesWithUniformRandomizer(firstGenes: List[Gene], secondGenes: List[Gen
   return newFirstGenes, newSecondGenes
 
 
-
-
 # MARK: - Chromosome controllers
 
-def createChromControllers(network, generation):
+def createChromControllers(network, generation: List[Chromosome]):
   chromControllers = []
   for chrom in generation:
     linkLoad = getLinkLoad(network, chrom)
