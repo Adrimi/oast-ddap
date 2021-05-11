@@ -2,7 +2,6 @@ import random
 from dataclasses import dataclass
 from typing import List
 
-
 # MARK: - Models namespace, algorithm specific objects
 
 
@@ -29,7 +28,7 @@ class ChromosomeController:
 @dataclass
 class Configuration:
   populationSize = 40 # is that should be % 4 == 0 ?
-  crossoverProbability = 0.5
+  crossoverProbability = 0.1
   mutationProbability = 0.1
 
   # Stop criteria parameters
@@ -70,22 +69,17 @@ def solve(network, configuration):
           lambda: uniformProbability(configuration.crossoverProbability)
         )
       
-        # mutation ( for now only for firstOffsping )
+        # mutate first offspring 
         if uniformProbability(configuration.mutationProbability):
           mutationCount += 1
-          randomDemandId = getRandomIndex(len(network.demands) - 1) + 1
-          pathLen = len(network.demands[randomDemandId - 1].paths)
-
-          # if picked demand has only one path then mutation is not available!
-          if pathLen == 1: break
-
-          pathRandomOne, pathRandomTwo = getTwoRandomIndexes(pathLen)
+          randomDemandId = getRandomIndex(len(network.demands) - 1)
+          firstChildGenes[randomDemandId] = mutate(firstChildGenes[randomDemandId])
           
-          pathLoadValueOne = firstChildGenes[randomDemandId - 1].values[pathRandomOne]
-          pathLoadValueTwo = firstChildGenes[randomDemandId - 1].values[pathRandomTwo]
-
-          firstChildGenes[randomDemandId - 1].values[pathRandomOne] = pathLoadValueTwo
-          firstChildGenes[randomDemandId - 1].values[pathRandomTwo] = pathLoadValueOne
+        # mutate second offspring 
+        if uniformProbability(configuration.mutationProbability):
+          mutationCount += 1
+          randomDemandId = getRandomIndex(len(network.demands) - 1)
+          secondChildGenes[randomDemandId] = mutate(secondChildGenes[randomDemandId])
         
         offSprings += createChromControllers(network, [Chromosome(firstChildGenes), Chromosome(secondChildGenes)])
     
@@ -114,15 +108,13 @@ def getBestParents(controllers):
   return controllers[:4]
 
 def uniformProbability(p: float):
-  def inner():
-    return random.uniform(0, 1) < p
-  return inner
+  return random.uniform(0, 1) < p
 
-def rollGenesWithUniformRandomizer(firstGenes: List[Gene], secondGenes: List[Gene], calculateProbability):
+def rollGenesWithUniformRandomizer(firstGenes: List[Gene], secondGenes: List[Gene], crossingIsPossible):
   newFirstGenes = []
   newSecondGenes = []
   for index, gene in enumerate(firstGenes):  
-    if calculateProbability():
+    if crossingIsPossible():
       newFirstGenes.append(secondGenes[index])
       newSecondGenes.append(gene)
     else:
@@ -130,6 +122,20 @@ def rollGenesWithUniformRandomizer(firstGenes: List[Gene], secondGenes: List[Gen
       newSecondGenes.append(secondGenes[index])
   return newFirstGenes, newSecondGenes
 
+
+def mutate(gene: Gene) -> Gene:
+  numberOfPaths = len(gene.values)
+  pathRandomOne, pathRandomTwo = getTwoRandomIndexes(numberOfPaths)
+
+  if numberOfPaths == 1: return gene
+  
+  pathLoadValueOne = gene.values[pathRandomOne]
+  pathLoadValueTwo = gene.values[pathRandomTwo]
+
+  gene.values[pathRandomOne] = pathLoadValueTwo
+  gene.values[pathRandomTwo] = pathLoadValueOne
+  
+  return gene
 
 # MARK: - Chromosome controllers
 
