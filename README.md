@@ -1,8 +1,17 @@
 # OAST Project 2
 
+[![CI](https://github.com/Adrimi/oast-ddap/actions/workflows/CI.yml/badge.svg)](https://github.com/Adrimi/oast-ddap/actions/workflows/CI.yml)
+
 The project aims to solve DAP and DDAP with use of evolutionary algorithm.
 
-## How to (on Linux/macOS)
+## 0.1 Release Features:
+
+- Loading and saving XML net files
+- Parsing XML Documents to Network object
+- DAP algorithm solver
+- Network encoder/decoder and algorithm tests
+
+## How to run (on Linux/macOS)
 
 To properly launch the files you need to:
 
