@@ -1,10 +1,10 @@
 import os
-from models import Network, Link, Demand, Path
+from parsers.NetworkModels import Network, Link, Demand, Path
 
 
 def createNetworkFrom(doc):
   links = list(map(LinkInit, element("link", doc)))
-  demands = list(map(DemandInit, element("demands", doc)))
+  demands = list(map(DemandInit, element("demand", doc)))
   return Network(links, demands)
 
 
@@ -12,7 +12,7 @@ def createNetworkFrom(doc):
 
 def LinkInit(data):
   return Link(
-    id=data.getAttribute("id"), 
+    id=int(data.getAttribute("id")),
     startNode=firstValue("startNode", data),
     endNode=firstValue("endNode", data),
     numberOfModules=firstValue("numberOfModules", data),
@@ -22,7 +22,7 @@ def LinkInit(data):
 
 def DemandInit(data):
   return Demand(
-    id=data.getAttribute("id"),
+    id=int(data.getAttribute("id")),
     startNode=firstValue("startNode", data),
     endNode=firstValue("endNode", data),
     volume=firstValue("volume", data),
@@ -36,10 +36,10 @@ def DemandInit(data):
 
 def PathInit(data):
   return Path(
-    id=data.getAttribute("id"),
+    id=int(data.getAttribute("id")),
     linkId=list(
       map(
-        lambda x: x.firstChild.data, 
+        lambda x: int(x.firstChild.data), 
         element("linkId", data)
       )
     )
@@ -53,4 +53,4 @@ def element(name, source):
   return source.getElementsByTagName(name)
 
 def firstValue(name, source):
-  return element(name, source)[0].firstChild.data
+  return int(element(name, source)[0].firstChild.data)
