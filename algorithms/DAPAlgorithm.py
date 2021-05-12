@@ -1,12 +1,11 @@
 import random
-from dataclasses import dataclass
 from typing import List
 from configuration.Configuration import Configuration
 from core.Models import ChromosomeController, Chromosome, Gene
 
 # MARK: - Main API
 
-def solve(network, configuration): 
+def solve(network, configuration) -> ChromosomeController: 
   initialGeneration = createFirstGeneration(network, configuration)
   chromControllers = createChromControllers(network, initialGeneration)
   chromControllers.sort(key=lambda c: c.maximumLoad)
@@ -14,8 +13,6 @@ def solve(network, configuration):
   currentGeneration = 0
   mutationCount = 0
   currentTimeInSeconds = 0
-
-  results = []
 
   while configuration.stopCrtiteriaHit(currentGeneration, mutationCount, currentTimeInSeconds) == False:
     # get half of the best chromosomes to be the candidates for parent crossing
@@ -51,11 +48,10 @@ def solve(network, configuration):
     newPopulation = chromControllers + offSprings
     newPopulation.sort(key=lambda c: c.maximumLoad)
     chromControllers = newPopulation[:configuration.populationSize]
-    results = chromControllers
 
     currentGeneration += 1
     
-  return results
+  return chromControllers[0]
   
 
 # MARK: - Helper methods
