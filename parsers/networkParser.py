@@ -1,4 +1,3 @@
-import os
 from parsers.NetworkModels import Network, Link, Demand, Path
 
 
