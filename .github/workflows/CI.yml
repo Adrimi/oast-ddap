@@ -1,0 +1,28 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: 3.9
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Execute pythonpath modification
+        run: |
+          export PYTHONPATH="${PYTHONPATH}:`pwd`"
+
+      - name: Test with unittest
+        run: |
+          python3 -m unittest parsers/NetworkXMLDecoderTests.py
+          python3 -m unittest parsers/NetworkXMLEncoderTests.py
+          python3 -m unittest algorithms/DAPAlgorithmTests.py
