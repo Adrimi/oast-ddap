@@ -44,14 +44,9 @@ class Gene:
 class Chromosome:
   genes: List[Gene]
 
-
+@dataclass
 class ChromosomeController:
   chromosome: Chromosome
   linkLoad: List[int]
   maximumLoad: int
-
-  def __init__(self, chromosome, linkLoad, maximumLoad):
-    self.chromosome = chromosome
-    self.linkLoad = linkLoad
-    self.maximumLoad = maximumLoad
 

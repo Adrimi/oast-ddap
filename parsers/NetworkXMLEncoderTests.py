@@ -1,6 +1,6 @@
 import unittest
 
-import persistence.TestHelpers as Helpers
+import parsers.TestHelpers as Helpers
 from core.Models import Network, Link, Demand, Path
 import parsers.NetworkXMLEncoder as Encoder
 

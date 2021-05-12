@@ -1,4 +1,5 @@
 from core.Models import Network, Link, Demand, Path
+from .Helpers import reduce
 
 # MARK: - Enocoders
 
@@ -20,11 +21,3 @@ def encodePathToXMLString(path: Path):
   links = reduce(path.linkId, lambda link: f"<linkId>{link}</linkId>")
 
   return f"<path id=\"{path.id}\">{links}</path>"
-
-# MARK: - Helper methods
-
-def reduce(elements, encoder):
-  joinedElements = ""
-  for element in elements:
-    joinedElements += encoder(element)
-  return joinedElements

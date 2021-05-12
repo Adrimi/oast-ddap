@@ -21,10 +21,11 @@ def main():
   
   setSeed(seed)
   solution = solve(network, environmentConfiguration)
+  
+  stringifiedSolution = encode(solution, network)
 
   pathToSave = os.path.join(os.getcwd(), outputDirectory + filename + "-solved.xml")
-  
-  stringifiedSolution = encode(solution)
+  save(stringifiedSolution, pathToSave)
 
 if __name__ == '__main__':
   main()
