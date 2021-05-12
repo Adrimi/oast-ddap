@@ -1,8 +1,7 @@
-import os
-from parsers.NetworkModels import Network, Link, Demand, Path
+from core.Models import Network, Link, Demand, Path
 
 
-def createNetworkFrom(doc):
+def decode(doc):
   links = list(map(LinkInit, element("link", doc)))
   demands = list(map(DemandInit, element("demand", doc)))
   return Network(links, demands)

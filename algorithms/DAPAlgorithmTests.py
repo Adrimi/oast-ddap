@@ -1,12 +1,9 @@
 import unittest
 
 import random
-from dataclasses import dataclass
 from typing import List
 
-import xml.dom.minidom as xml
-from parsers.NetworkParser import createNetworkFrom
-from parsers.NetworkModels import Network, Link, Demand, Path
+from core.Models import Network, Link, Demand, Path
 from configuration.Configuration import Configuration
 import algorithms.DAPAlgorithm as dap
 

@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import List
 
+# MARK: - Core models
+
 @dataclass
 class Path:
   id: int
@@ -30,3 +32,21 @@ class Link:
 class Network:
   links: List[Link]
   demands: List[Demand]
+
+
+# MARK: - Algorithm specific models
+
+@dataclass
+class Gene:
+  values: List[int]
+
+@dataclass
+class Chromosome:
+  genes: List[Gene]
+
+@dataclass
+class ChromosomeController:
+  chromosome: Chromosome
+  linkLoad: List[int]
+  maximumLoad: int
+

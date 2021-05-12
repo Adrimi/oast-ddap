@@ -1,34 +1,11 @@
 import random
-from dataclasses import dataclass
 from typing import List
 from configuration.Configuration import Configuration
-
-# MARK: - Models namespace, algorithm specific objects
-
-
-@dataclass
-class Gene:
-  values: List[int]
-
-@dataclass
-class Chromosome:
-  genes: List[Gene]
-
-
-class ChromosomeController:
-  chromosome: Chromosome
-  linkLoad: List[int]
-  maximumLoad: int
-
-  def __init__(self, chromosome, linkLoad, maximumLoad):
-    self.chromosome = chromosome
-    self.linkLoad = linkLoad
-    self.maximumLoad = maximumLoad
-
+from core.Models import ChromosomeController, Chromosome, Gene
 
 # MARK: - Main API
 
-def solve(network, configuration): 
+def solve(network, configuration) -> ChromosomeController: 
   initialGeneration = createFirstGeneration(network, configuration)
   chromControllers = createChromControllers(network, initialGeneration)
   chromControllers.sort(key=lambda c: c.maximumLoad)
@@ -71,9 +48,10 @@ def solve(network, configuration):
     newPopulation = chromControllers + offSprings
     newPopulation.sort(key=lambda c: c.maximumLoad)
     chromControllers = newPopulation[:configuration.populationSize]
+
     currentGeneration += 1
     
-    print(chromControllers[0].maximumLoad)
+  return chromControllers[0]
   
 
 # MARK: - Helper methods
