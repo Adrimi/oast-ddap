@@ -153,3 +153,5 @@ XML_STRING = """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
 
 LINK_XML_STRING = "<link id=\"1\"><startNode>1</startNode><endNode>2</endNode><numberOfModules>72</numberOfModules><moduleCost>1</moduleCost><linkModule>2</linkModule></link>"
+
+DEMAND_XML_STRING = "<demand id=\"1\"><startNode>1</startNode><endNode>2</endNode><volume>3</volume><paths><path id=\"1\"><linkId>1</linkId></path><path id=\"2\"><linkId>2</linkId><linkId>3</linkId></path><path id=\"3\"><linkId>2</linkId><linkId>5</linkId><linkId>4</linkId></path></paths></demand>"

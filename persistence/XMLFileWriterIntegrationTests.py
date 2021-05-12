@@ -18,6 +18,14 @@ class XMLFileWriterIntegrationTests(unittest.TestCase):
 
     self.assertEqual(expectedXMLString, receivedXMLString)
 
+  def test_encoding_convertDemandObjectToXMLString(self):
+    expectedXMLString = Helpers.DEMAND_XML_STRING
+    testDemand = self.__testNetwork().demands[0]
+    
+    receivedXMLString = writer.encodeDemandToXMLString(testDemand)
+
+    self.assertEqual(expectedXMLString, receivedXMLString)
+
   def __testNetwork(self):
     demands = [
       Demand(id=1, startNode=1, endNode=2, volume=3, paths=[
