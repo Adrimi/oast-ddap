@@ -1,33 +1,34 @@
 import unittest
 
-from typing import List
+import persistence.TestHelpers as Helpers
+from core.Models import Network, Link, Demand, Path
+import parsers.NetworkXMLEncoder as Encoder
 
-import TestHelpers
-import xml.dom.minidom as xml
-from NetworkParser import createNetworkFrom
-from NetworkModels import Network, Link, Demand, Path
+class NetworkXMLEncoderTests(unittest.TestCase):
 
+  def test_encoding_convertLinkObjectToXMLString(self):
+    expectedXMLString = Helpers.LINK_XML_STRING
+    testLink = self.__testNetwork().links[0]
+    
+    receivedXMLString = Encoder.encodeLinkToXMLString(testLink)
 
-class NetworkParserIntegrationTests(unittest.TestCase):
+    self.assertEqual(expectedXMLString, receivedXMLString)
 
-  def test_createNetwork_parseDataFromXMLFile(self):
-    XMLString = TestHelpers.XML_STRING
-    expectedNetwork = self.__testNetwork()
-    doc = xml.parseString(XMLString)
+  def test_encoding_convertDemandObjectToXMLString(self):
+    expectedXMLString = Helpers.DEMAND_XML_STRING
+    testDemand = self.__testNetwork().demands[0]
+    
+    receivedXMLString = Encoder.encodeDemandToXMLString(testDemand)
 
-    network = createNetworkFrom(doc)
+    self.assertEqual(expectedXMLString, receivedXMLString)
 
-    self.assertEqual(network.demands[0].id, expectedNetwork.demands[0].id)
-    self.assertEqual(network.demands[0].startNode, expectedNetwork.demands[0].startNode)
-    self.assertEqual(network.demands[0].endNode, expectedNetwork.demands[0].endNode)
-    self.assertEqual(network.demands[0].volume, expectedNetwork.demands[0].volume)
-    self.assertEqual(network.demands[0].paths[0].id, expectedNetwork.demands[0].paths[0].id)
+  def test_encoding_convertNetworkObjectToXMLString(self):
+    expectedXMLString = Helpers.NETWORK_XML_STRING
+    testNetwork = self.__testNetwork()
+    
+    receivedXMLString = Encoder.encodeNetworkToXMLString(testNetwork)
 
-    self.assertEqual(network.links[0].id, expectedNetwork.links[0].id)
-    self.assertEqual(network.links[0].startNode, expectedNetwork.links[0].startNode)
-    self.assertEqual(network.links[0].endNode, expectedNetwork.links[0].endNode)
-    self.assertEqual(network.links[0].numberOfModules, expectedNetwork.links[0].numberOfModules)
-
+    self.assertEqual(expectedXMLString, receivedXMLString)
 
   def __testNetwork(self):
     demands = [

@@ -1,36 +1,31 @@
 import unittest
 
-from unittest.case import expectedFailure
+import parsers.TestHelpers as Helpers
+import xml.dom.minidom as xml
+from parsers.NetworkXMLDecoder import decode
+from core.Models import Network, Link, Demand, Path
 
-import persistence.TestHelpers as Helpers
-from parsers.NetworkModels import Network, Link, Demand, Path
-import persistence.XMLFileWriter as writer
 
-class XMLFileWriterIntegrationTests(unittest.TestCase):
+class NetworkXMLDecoderTests(unittest.TestCase):
 
-  def test_encoding_convertLinkObjectToXMLString(self):
-    expectedXMLString = Helpers.LINK_XML_STRING
-    testLink = self.__testNetwork().links[0]
-    
-    receivedXMLString = writer.encodeLinkToXMLString(testLink)
+  def test_createNetwork_parseDataFromXMLFile(self):
+    XMLString = Helpers.XML_STRING
+    expectedNetwork = self.__testNetwork()
+    doc = xml.parseString(XMLString)
 
-    self.assertEqual(expectedXMLString, receivedXMLString)
+    network = decode(doc)
 
-  def test_encoding_convertDemandObjectToXMLString(self):
-    expectedXMLString = Helpers.DEMAND_XML_STRING
-    testDemand = self.__testNetwork().demands[0]
-    
-    receivedXMLString = writer.encodeDemandToXMLString(testDemand)
+    self.assertEqual(network.demands[0].id, expectedNetwork.demands[0].id)
+    self.assertEqual(network.demands[0].startNode, expectedNetwork.demands[0].startNode)
+    self.assertEqual(network.demands[0].endNode, expectedNetwork.demands[0].endNode)
+    self.assertEqual(network.demands[0].volume, expectedNetwork.demands[0].volume)
+    self.assertEqual(network.demands[0].paths[0].id, expectedNetwork.demands[0].paths[0].id)
 
-    self.assertEqual(expectedXMLString, receivedXMLString)
+    self.assertEqual(network.links[0].id, expectedNetwork.links[0].id)
+    self.assertEqual(network.links[0].startNode, expectedNetwork.links[0].startNode)
+    self.assertEqual(network.links[0].endNode, expectedNetwork.links[0].endNode)
+    self.assertEqual(network.links[0].numberOfModules, expectedNetwork.links[0].numberOfModules)
 
-  def test_encoding_convertNetworkObjectToXMLString(self):
-    expectedXMLString = Helpers.NETWORK_XML_STRING
-    testNetwork = self.__testNetwork()
-    
-    receivedXMLString = writer.encodeNetworkToXMLString(testNetwork)
-
-    self.assertEqual(expectedXMLString, receivedXMLString)
 
   def __testNetwork(self):
     demands = [

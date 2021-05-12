@@ -2,29 +2,7 @@ import random
 from dataclasses import dataclass
 from typing import List
 from configuration.Configuration import Configuration
-
-# MARK: - Models namespace, algorithm specific objects
-
-
-@dataclass
-class Gene:
-  values: List[int]
-
-@dataclass
-class Chromosome:
-  genes: List[Gene]
-
-
-class ChromosomeController:
-  chromosome: Chromosome
-  linkLoad: List[int]
-  maximumLoad: int
-
-  def __init__(self, chromosome, linkLoad, maximumLoad):
-    self.chromosome = chromosome
-    self.linkLoad = linkLoad
-    self.maximumLoad = maximumLoad
-
+from core.Models import ChromosomeController, Chromosome, Gene
 
 # MARK: - Main API
 
