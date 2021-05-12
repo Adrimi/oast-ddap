@@ -1,8 +1,6 @@
 import unittest
 
-from typing import List
 from unittest.case import expectedFailure
-import xml.dom.minidom as xml
 
 import persistence.TestHelpers as Helpers
 from parsers.NetworkModels import Network, Link, Demand, Path
@@ -23,6 +21,14 @@ class XMLFileWriterIntegrationTests(unittest.TestCase):
     testDemand = self.__testNetwork().demands[0]
     
     receivedXMLString = writer.encodeDemandToXMLString(testDemand)
+
+    self.assertEqual(expectedXMLString, receivedXMLString)
+
+  def test_encoding_convertNetworkObjectToXMLString(self):
+    expectedXMLString = Helpers.NETWORK_XML_STRING
+    testNetwork = self.__testNetwork()
+    
+    receivedXMLString = writer.encodeNetworkToXMLString(testNetwork)
 
     self.assertEqual(expectedXMLString, receivedXMLString)
 
