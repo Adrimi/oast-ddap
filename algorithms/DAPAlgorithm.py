@@ -37,6 +37,8 @@ def solve(network, configuration):
   mutationCount = 0
   currentTimeInSeconds = 0
 
+  results = []
+
   while configuration.stopCrtiteriaHit(currentGeneration, mutationCount, currentTimeInSeconds) == False:
     # get half of the best chromosomes to be the candidates for parent crossing
     parents = chromControllers[0:int(len(chromControllers)/2)]
@@ -71,9 +73,11 @@ def solve(network, configuration):
     newPopulation = chromControllers + offSprings
     newPopulation.sort(key=lambda c: c.maximumLoad)
     chromControllers = newPopulation[:configuration.populationSize]
+    results = chromControllers
+
     currentGeneration += 1
     
-    print(chromControllers[0].maximumLoad)
+  return results
   
 
 # MARK: - Helper methods
