@@ -138,7 +138,6 @@ def getLinkLoad(network, chromosome):
   for demandId, demand in enumerate(network.demands):
     gene = chromosome.genes[demandId]
     for pathId, path in enumerate(demand.paths):
-      value = gene.values[pathId]
       for linkId in path.linkId:
         linkLoad[linkId - 1] += gene.values[pathId]
   
@@ -154,7 +153,7 @@ def getMaximumLoad(linkLoad, links):
 
 def createFirstGeneration(network, configuration: Configuration) -> List[Chromosome]:
   generation = []
-  for i in range(configuration.populationSize):
+  for _ in range(configuration.populationSize):
     generation.append(createChromosome(network))
   return generation
 
