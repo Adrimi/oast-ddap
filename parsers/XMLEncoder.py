@@ -3,7 +3,6 @@ from os import path
 from unittest import signals
 
 from core.Models import DAPChromosomeController, DDAPChromosomeController, Gene, Network
-from .Helpers import reduce
 
 def encodeDAP(bestSolution: DAPChromosomeController, network: Network) -> str:
   return __encode(bestSolution.linkLoad, bestSolution.chromosome, network)
