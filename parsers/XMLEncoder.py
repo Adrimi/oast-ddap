@@ -2,14 +2,19 @@ from math import ceil
 from os import path
 from unittest import signals
 
-from core.Models import ChromosomeController, Chromosome, Gene, Network, Demand, Link, Path
-from .Helpers import reduce
+from core.Models import DAPChromosomeController, DDAPChromosomeController, Gene, Network
 
-def encode(bestSolution: ChromosomeController, network: Network) -> str:
+def encodeDAP(bestSolution: DAPChromosomeController, network: Network) -> str:
+  return __encode(bestSolution.linkLoad, bestSolution.chromosome, network)
+
+def encodeDDAP(bestSolution: DDAPChromosomeController, network: Network) -> str:
+  return __encode(bestSolution.linkLoad, bestSolution.chromosome, network)
+
+def __encode(linkLoad, chromosome, network) -> str:
   header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
 
   linkPart = ""
-  for index, value in enumerate(bestSolution.linkLoad):
+  for index, value in enumerate(linkLoad):
     linkPart += encodeLinkLoad(
       index + 1, 
       ceil(value),
@@ -17,7 +22,7 @@ def encode(bestSolution: ChromosomeController, network: Network) -> str:
       )
 
   demandPart = ""
-  for index, gene in enumerate(bestSolution.chromosome.genes):
+  for index, gene in enumerate(chromosome.genes):
     pathFlow = PathFlow(index, gene)
     demandPart += encodeDemandPart(
       index + 1,
