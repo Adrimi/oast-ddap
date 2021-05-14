@@ -2,75 +2,75 @@
 <solution>
   <links>
     <link id="1">
-      <numberOfSignals>205</numberOfSignals>
-      <numberOfFibers>3</numberOfFibers>
+      <numberOfSignals>175</numberOfSignals>
+      <numberOfFibers>2</numberOfFibers>
     </link>
     <link id="2">
-      <numberOfSignals>202</numberOfSignals>
-      <numberOfFibers>3</numberOfFibers>
+      <numberOfSignals>163</numberOfSignals>
+      <numberOfFibers>2</numberOfFibers>
     </link>
     <link id="3">
-      <numberOfSignals>126</numberOfSignals>
-      <numberOfFibers>2</numberOfFibers>
-    </link>
-    <link id="4">
-      <numberOfSignals>158</numberOfSignals>
-      <numberOfFibers>2</numberOfFibers>
-    </link>
-    <link id="5">
-      <numberOfSignals>200</numberOfSignals>
-      <numberOfFibers>3</numberOfFibers>
-    </link>
-    <link id="6">
-      <numberOfSignals>128</numberOfSignals>
-      <numberOfFibers>2</numberOfFibers>
-    </link>
-    <link id="7">
-      <numberOfSignals>134</numberOfSignals>
-      <numberOfFibers>2</numberOfFibers>
-    </link>
-    <link id="8">
-      <numberOfSignals>129</numberOfSignals>
-      <numberOfFibers>2</numberOfFibers>
-    </link>
-    <link id="9">
-      <numberOfSignals>98</numberOfSignals>
-      <numberOfFibers>2</numberOfFibers>
-    </link>
-    <link id="10">
       <numberOfSignals>144</numberOfSignals>
       <numberOfFibers>2</numberOfFibers>
     </link>
+    <link id="4">
+      <numberOfSignals>187</numberOfSignals>
+      <numberOfFibers>2</numberOfFibers>
+    </link>
+    <link id="5">
+      <numberOfSignals>279</numberOfSignals>
+      <numberOfFibers>3</numberOfFibers>
+    </link>
+    <link id="6">
+      <numberOfSignals>117</numberOfSignals>
+      <numberOfFibers>2</numberOfFibers>
+    </link>
+    <link id="7">
+      <numberOfSignals>65</numberOfSignals>
+      <numberOfFibers>1</numberOfFibers>
+    </link>
+    <link id="8">
+      <numberOfSignals>84</numberOfSignals>
+      <numberOfFibers>1</numberOfFibers>
+    </link>
+    <link id="9">
+      <numberOfSignals>70</numberOfSignals>
+      <numberOfFibers>1</numberOfFibers>
+    </link>
+    <link id="10">
+      <numberOfSignals>95</numberOfSignals>
+      <numberOfFibers>1</numberOfFibers>
+    </link>
     <link id="11">
-      <numberOfSignals>186</numberOfSignals>
+      <numberOfSignals>190</numberOfSignals>
       <numberOfFibers>2</numberOfFibers>
     </link>
     <link id="12">
-      <numberOfSignals>177</numberOfSignals>
+      <numberOfSignals>144</numberOfSignals>
       <numberOfFibers>2</numberOfFibers>
     </link>
     <link id="13">
-      <numberOfSignals>202</numberOfSignals>
-      <numberOfFibers>3</numberOfFibers>
+      <numberOfSignals>170</numberOfSignals>
+      <numberOfFibers>2</numberOfFibers>
     </link>
     <link id="14">
-      <numberOfSignals>198</numberOfSignals>
+      <numberOfSignals>239</numberOfSignals>
       <numberOfFibers>3</numberOfFibers>
     </link>
     <link id="15">
-      <numberOfSignals>105</numberOfSignals>
+      <numberOfSignals>157</numberOfSignals>
       <numberOfFibers>2</numberOfFibers>
     </link>
     <link id="16">
-      <numberOfSignals>104</numberOfSignals>
-      <numberOfFibers>2</numberOfFibers>
+      <numberOfSignals>75</numberOfSignals>
+      <numberOfFibers>1</numberOfFibers>
     </link>
     <link id="17">
       <numberOfSignals>133</numberOfSignals>
       <numberOfFibers>2</numberOfFibers>
     </link>
     <link id="18">
-      <numberOfSignals>157</numberOfSignals>
+      <numberOfSignals>172</numberOfSignals>
       <numberOfFibers>2</numberOfFibers>
     </link>
   </links>

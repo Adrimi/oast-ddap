@@ -2,15 +2,15 @@ import os
 from persistence.XMLFileLoader import loadFileFrom
 from persistence.XMLFileWriter import save
 from parsers.NetworkXMLDecoder import decode
-from parsers.XMLEncoder import encode
-from algorithms.DAPAlgorithm import setSeed, solve
+from parsers.XMLEncoder import encodeDAP, encodeDDAP
+from algorithms.Algorithms import setSeed, solveDAP, solveDDAP
 from configuration.Configuration import Configuration
 
 inputDirectory = "input/"
 outputDirectory = "output/"
 filename = "net12_1.xml" 
 
-seed = "abc"
+seed = "JSG"
 
 environmentConfiguration = Configuration()
 
@@ -20,12 +20,17 @@ def main():
   network = decode(doc)
   
   setSeed(seed)
-  solution = solve(network, environmentConfiguration)
+  dapSolution = solveDAP(network, environmentConfiguration)
+  ddapSolution = solveDDAP(network, environmentConfiguration)
   
-  stringifiedSolution = encode(solution, network)
+  dapSolutionStringified = encodeDAP(dapSolution, network)
+  ddapSolutionStringified = encodeDDAP(ddapSolution, network)
 
-  pathToSave = os.path.join(os.getcwd(), outputDirectory + filename + "-solved.xml")
-  save(stringifiedSolution, pathToSave)
+  pathToSaveDAP = os.path.join(os.getcwd(), outputDirectory + filename + "-DAP.xml")
+  pathToSaveDDAP = os.path.join(os.getcwd(), outputDirectory + filename + "-DDAP.xml")
+
+  save(dapSolutionStringified, pathToSaveDAP)
+  save(ddapSolutionStringified, pathToSaveDDAP)
 
 if __name__ == '__main__':
   main()

@@ -45,8 +45,13 @@ class Chromosome:
   genes: List[Gene]
 
 @dataclass
-class ChromosomeController:
+class DAPChromosomeController:
   chromosome: Chromosome
   linkLoad: List[int]
   maximumLoad: int
 
+@dataclass
+class DDAPChromosomeController:
+  chromosome: Chromosome
+  linkLoad: List[int]
+  totalCost: int

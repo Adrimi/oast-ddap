@@ -1,13 +1,15 @@
 import random
+import math
 from typing import List
 from configuration.Configuration import Configuration
-from core.Models import ChromosomeController, Chromosome, Gene
+from core.Models import DAPChromosomeController, DDAPChromosomeController, Chromosome, Gene
 
 # MARK: - Main API
 
-def solve(network, configuration) -> ChromosomeController: 
+# DAP
+def solveDAP(network, configuration) -> DAPChromosomeController: 
   initialGeneration = createFirstGeneration(network, configuration)
-  chromControllers = createChromControllers(network, initialGeneration)
+  chromControllers = createDAPChromControllers(network, initialGeneration)
   chromControllers.sort(key=lambda c: c.maximumLoad)
 
   currentGeneration = 0
@@ -43,16 +45,67 @@ def solve(network, configuration) -> ChromosomeController:
           randomDemandId = getRandomIndex(len(network.demands) - 1)
           secondChildGenes[randomDemandId] = mutate(secondChildGenes[randomDemandId])
         
-        offSprings += createChromControllers(network, [Chromosome(firstChildGenes), Chromosome(secondChildGenes)])
+        offSprings += createDAPChromControllers(network, [Chromosome(firstChildGenes), Chromosome(secondChildGenes)])
     
     newPopulation = chromControllers + offSprings
     newPopulation.sort(key=lambda c: c.maximumLoad)
     chromControllers = newPopulation[:configuration.populationSize]
 
     currentGeneration += 1
+    print(f'Best DAP: {chromControllers[0].maximumLoad}')
     
   return chromControllers[0]
   
+
+# DDAP
+def solveDDAP(network, configuration) -> DDAPChromosomeController: 
+  initialGeneration = createFirstGeneration(network, configuration)
+  chromControllers = createDDAPChromControllers(network, initialGeneration)
+  chromControllers.sort(key=lambda c: c.totalCost)
+
+  currentGeneration = 0
+  mutationCount = 0
+  currentTimeInSeconds = 0
+
+  while configuration.stopCrtiteriaHit(currentGeneration, mutationCount, currentTimeInSeconds) == False:
+    # get half of the best chromosomes to be the candidates for parent crossing
+    parents = chromControllers[0:int(len(chromControllers)/2)]
+    offSprings = []
+    
+    for index in range(len(parents) - 1):
+      # crossing
+      if uniformProbability(configuration.crossoverProbability):
+        firstParentGenes = parents[index].chromosome.genes
+        secondParentGenes = parents[index + 1].chromosome.genes
+
+        firstChildGenes, secondChildGenes = crossGenes(
+          firstParentGenes, 
+          secondParentGenes, 
+          lambda: uniformProbability(configuration.crossoverProbability)
+        )
+      
+        # mutate first offspring 
+        if uniformProbability(configuration.mutationProbability):
+          mutationCount += 1
+          randomDemandId = getRandomIndex(len(network.demands) - 1)
+          firstChildGenes[randomDemandId] = mutate(firstChildGenes[randomDemandId])
+          
+        # mutate second offspring 
+        if uniformProbability(configuration.mutationProbability):
+          mutationCount += 1
+          randomDemandId = getRandomIndex(len(network.demands) - 1)
+          secondChildGenes[randomDemandId] = mutate(secondChildGenes[randomDemandId])
+        
+        offSprings += createDDAPChromControllers(network, [Chromosome(firstChildGenes), Chromosome(secondChildGenes)])
+    
+    newPopulation = chromControllers + offSprings
+    newPopulation.sort(key=lambda c: c.totalCost)
+    chromControllers = newPopulation[:configuration.populationSize]
+
+    currentGeneration += 1
+    print(f'Best DDAP: {chromControllers[0].totalCost}')
+    
+  return chromControllers[0]
 
 # MARK: - Helper methods
 
@@ -88,9 +141,9 @@ def crossGenes(firstGenes: List[Gene], secondGenes: List[Gene], crossingIsPossib
 
 def mutate(gene: Gene) -> Gene:
   numberOfPaths = len(gene.values)
-  pathRandomOne, pathRandomTwo = getTwoRandomIndexes(numberOfPaths)
-
   if numberOfPaths == 1: return gene
+
+  pathRandomOne, pathRandomTwo = getTwoRandomIndexes(numberOfPaths)
   
   pathLoadValueOne = gene.values[pathRandomOne]
   pathLoadValueTwo = gene.values[pathRandomTwo]
@@ -102,12 +155,20 @@ def mutate(gene: Gene) -> Gene:
 
 # MARK: - Chromosome controllers
 
-def createChromControllers(network, generation: List[Chromosome]):
+def createDAPChromControllers(network, generation: List[Chromosome]):
   chromControllers = []
   for chrom in generation:
     linkLoad = getLinkLoad(network, chrom)
     maximumLoad = getMaximumLoad(linkLoad, network.links)
-    chromControllers.append(ChromosomeController(chrom, linkLoad, maximumLoad))
+    chromControllers.append(DAPChromosomeController(chrom, linkLoad, maximumLoad))
+  return chromControllers
+
+def createDDAPChromControllers(network, generation: List[Chromosome]):
+  chromControllers = []
+  for chrom in generation:
+    linkLoad = getLinkLoad(network, chrom)
+    totalCost = getTotalCost(linkLoad, network.links)
+    chromControllers.append(DDAPChromosomeController(chrom, linkLoad, totalCost))
   return chromControllers
 
 def getLinkLoad(network, chromosome):
@@ -126,6 +187,16 @@ def getMaximumLoad(linkLoad, links):
   for link in links:
     maximumLoad = max(linkLoad[link.id - 1] - link.numberOfModules * link.linkModule, maximumLoad)
   return maximumLoad
+
+def getTotalCost(linkLoad, links):
+  link_size_matrix = {}
+  totalCost = 0
+  
+  for link in links:
+    link_size = math.ceil(linkLoad[link.id - 1] / link.linkModule)
+    link_size_matrix[link.id - 1] = link_size
+    totalCost += link_size * link.moduleCost
+  return totalCost
 
 # MARK: - Chromosome generation
 

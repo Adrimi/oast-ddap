@@ -5,7 +5,7 @@ from typing import List
 
 from core.Models import Network, Link, Demand, Path
 from configuration.Configuration import Configuration
-import algorithms.DAPAlgorithm as dap
+import algorithms.Algorithms as dap
 
 
 class TestCase:
@@ -67,7 +67,7 @@ class DAPAlgorithmTests(unittest.TestCase):
 
     self.__interceptSeed()
     initialGeneration = dap.createFirstGeneration(network, configuration)
-    controllers = dap.createChromControllers(network, initialGeneration)
+    controllers = dap.createDAPChromControllers(network, initialGeneration)
     controllers.sort(key=lambda c: c.maximumLoad)
 
     bestParents = dap.getBestParents(controllers)
