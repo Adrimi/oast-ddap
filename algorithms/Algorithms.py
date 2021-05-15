@@ -185,7 +185,7 @@ def getLinkLoad(network, chromosome):
 def getMaximumLoad(linkLoad, links):
   maximumLoad = 0
   for link in links:
-    maximumLoad = max(linkLoad[link.id - 1] - link.numberOfModules * link.linkModule, maximumLoad)
+    maximumLoad = linkLoad[link.id - 1] - link.numberOfModules * link.linkModule
   return maximumLoad
 
 def getTotalCost(linkLoad, links):
