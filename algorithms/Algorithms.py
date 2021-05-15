@@ -189,13 +189,9 @@ def getMaximumLoad(linkLoad, links):
   return maximumLoad
 
 def getTotalCost(linkLoad, links):
-  link_size_matrix = {}
   totalCost = 0
-  
   for link in links:
-    link_size = math.ceil(linkLoad[link.id - 1] / link.linkModule)
-    link_size_matrix[link.id - 1] = link_size
-    totalCost += link_size * link.moduleCost
+    totalCost += math.ceil(linkLoad[link.id - 1] / link.linkModule) * link.moduleCost
   return totalCost
 
 # MARK: - Chromosome generation
