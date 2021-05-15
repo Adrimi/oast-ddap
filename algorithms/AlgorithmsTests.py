@@ -59,7 +59,7 @@ class DAPAlgorithmTests(unittest.TestCase):
 
     maximumLoad = dap.getMaximumLoad(linkLoadList, network.links)
 
-    self.assertEqual(maximumLoad, 37)
+    self.assertEqual(maximumLoad, -3)
 
   def test_getBestParents_returnsFourChromosomes(self):
     network = self.__createNetwork()
@@ -76,7 +76,7 @@ class DAPAlgorithmTests(unittest.TestCase):
       bestParents
     ))
 
-    self.assertEqual(highestMaximumLoads, [13, 19, 20, 26])
+    self.assertEqual(highestMaximumLoads, [-34, -30, -29, -25])
 
 
   # MARK: - Helper methods
@@ -134,7 +134,15 @@ class DAPAlgorithmTests(unittest.TestCase):
 
 
   def testConfiguration(self):
-    return Configuration()
+    conf = Configuration()
+    conf.populationSize = 40
+    conf.crossoverProbability = 0.5
+    conf.mutationProbability = 0.2
+    conf.maxTimeInSeconds = 10
+    conf.maxGenerationNumber = 50
+    conf.maxMutationEvents = 600
+    conf.maxImprovementsNumber = 15
+    return conf
 
 
 # MARK: - Launch 
