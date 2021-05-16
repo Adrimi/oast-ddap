@@ -2,13 +2,13 @@ from dataclasses import dataclass
 
 @dataclass
 class Configuration:
-  populationSize = 1000
-  crossoverProbability = 0.2
-  mutationProbability = 0.1
+  populationSize = 40
+  crossoverProbability = 0.5
+  mutationProbability = 0.2
 
   # Stop criteria parameters
   maxTimeInSeconds = 10
-  maxGenerationNumber = 100
+  maxGenerationNumber = 50
   maxMutationEvents = 600
   maxImprovementsNumber = 15
 
