@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Configuration:
-  populationSize = 40 # is that should be % 4 == 0 ?
+  populationSize = 40
   crossoverProbability = 0.5
   mutationProbability = 0.2
 

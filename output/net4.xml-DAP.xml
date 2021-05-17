@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<solution>
+  <links>
+    <link id="1">
+      <numberOfSignals>15</numberOfSignals>
+      <numberOfFibers>8</numberOfFibers>
+    </link>
+    <link id="2">
+      <numberOfSignals>3</numberOfSignals>
+      <numberOfFibers>2</numberOfFibers>
+    </link>
+    <link id="3">
+      <numberOfSignals>7</numberOfSignals>
+      <numberOfFibers>4</numberOfFibers>
+    </link>
+    <link id="4">
+      <numberOfSignals>12</numberOfSignals>
+      <numberOfFibers>6</numberOfFibers>
+    </link>
+    <link id="5">
+      <numberOfSignals>0</numberOfSignals>
+      <numberOfFibers>0</numberOfFibers>
+    </link>
+  </links>
+  <demands>
+    <demand id="1">
+      <pathFlows>
+        <pathFlow id="0">
+          <signalsCount>3</signalsCount>
+        </pathFlow>
+      </pathFlows>
+    </demand>
+    <demand id="2">
+      <pathFlows>
+        <pathFlow id="1">
+          <signalsCount>4</signalsCount>
+        </pathFlow>
+      </pathFlows>
+    </demand>
+    <demand id="3">
+      <pathFlows>
+        <pathFlow id="2">
+          <signalsCount>5</signalsCount>
+        </pathFlow>
+      </pathFlows>
+    </demand>
+    <demand id="4">
+      <pathFlows>
+        <pathFlow id="3">
+          <signalsCount>2</signalsCount>
+        </pathFlow>
+      </pathFlows>
+    </demand>
+    <demand id="5">
+      <pathFlows>
+        <pathFlow id="4">
+          <signalsCount>3</signalsCount>
+        </pathFlow>
+      </pathFlows>
+    </demand>
+    <demand id="6">
+      <pathFlows>
+        <pathFlow id="5">
+          <signalsCount>4</signalsCount>
+        </pathFlow>
+      </pathFlows>
+    </demand>
+  </demands>
+</solution>
