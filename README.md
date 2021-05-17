@@ -4,10 +4,12 @@
 
 The project aims to solve DAP and DDAP with use of evolutionary algorithm.
 
-## 0.2 Release Features:
+## 0.3 Release Features:
 
-- **new: DDAP algorithm solver**
-- **new: Adjusted configuration and seed**
+- **fix: Link load calculation fix**
+- **fix: Revert do default configuration**
+- DDAP algorithm solver
+- Adjusted configuration and seed
 - Loading and saving XML net files
 - Parsing XML Documents to Network object
 - DAP algorithm solver
